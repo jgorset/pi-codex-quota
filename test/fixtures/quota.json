@@ -1,0 +1,22 @@
+{
+  "rateLimits": {
+    "primary": { "usedPercent": 99, "windowDurationMins": 300, "resetsAt": 1791047315 }
+  },
+  "rateLimitsByLimitId": {
+    "codex": {
+      "primary": { "usedPercent": 27.6, "windowDurationMins": 10080, "resetsAt": 1791047315 },
+      "secondary": null
+    }
+  },
+  "rateLimitResetCredits": {
+    "availableCount": 3,
+    "credits": [
+      { "resetType": "codexRateLimits", "status": "available", "grantedAt": 1790800000, "expiresAt": 1791400000, "title": "SYNTHETIC_SECRET_TITLE", "id": "SYNTHETIC_CREDIT_ID" },
+      { "resetType": "codexRateLimits", "status": "available", "grantedAt": 1790800000, "expiresAt": 1791100000 },
+      { "resetType": "codexRateLimits", "status": "redeemed", "grantedAt": 1790700000, "expiresAt": 1791000000 },
+      { "resetType": "codexRateLimits", "status": "available", "grantedAt": 1790800000, "expiresAt": 1791200000 }
+    ]
+  },
+  "accountId": "SYNTHETIC_ACCOUNT_ID",
+  "accessToken": "SYNTHETIC_ACCESS_TOKEN"
+}
