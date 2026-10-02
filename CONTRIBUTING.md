@@ -18,6 +18,8 @@ Use only synthetic fixtures. Never commit raw account responses, credentials, ac
 - Run `npm run check` on Windows and at least one Unix platform. CI also targets macOS; configured CI is not evidence of an executed run.
 - Verify a normal interactive Pi session, `/codex-quota`, `/codex-resets`, upgrade/reload, and unavailable/stale states. Do not redeem a reset to validate.
 - Review `npm pack --dry-run --json --ignore-scripts` and the Git diff for sensitive data and unrelated files.
+- Run a dedicated secret scanner over all Git history and the extracted package, with redaction enabled (for example `gitleaks git --log-opts="--all" --redact=100`). Never paste unredacted matches into logs or reports.
+- Run `npm audit` including development dependencies and review open findings in [SECURITY.md](SECURITY.md). A clean runtime-only audit is not a clean full dependency audit.
 - Ensure the bundle matches source with `npm run build:check`.
 - Confirm repository owner/URL, public visibility, and commit-author metadata before pushing. Set the real repository metadata in `package.json`; do not ship placeholder URLs.
 - Update the changelog and tag only after acceptance. Git installation needs the committed bundle, not build hooks.

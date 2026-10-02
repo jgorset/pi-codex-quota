@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
 import { readFileSync, readdirSync } from 'node:fs';
 import { homedir } from 'node:os';
-import { join } from 'node:path';
+import { basename, join, relative } from 'node:path';
+import { assertNoSensitiveContent, isCredentialFilename } from './security-patterns.mjs';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('..', import.meta.url));
@@ -13,7 +14,7 @@ let results;
 try { results = JSON.parse(packed.stdout); }
 catch { throw new Error('npm pack did not return the expected JSON manifest.'); }
 const files = results[0].files.map(file => file.path).sort();
-assert.deepEqual(files, ['CHANGELOG.md', 'LICENSE', 'README.md', 'dist/index.ts', 'package.json'].sort());
+assert.deepEqual(files, ['CHANGELOG.md', 'LICENSE', 'README.md', 'SECURITY.md', 'dist/index.ts', 'package.json'].sort());
 const excluded = new Set(['node_modules', '.git', '.validation', 'coverage']);
 function walk(dir) {
   return readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
@@ -24,11 +25,13 @@ function walk(dir) {
 }
 const home = homedir();
 for (const path of walk(root)) {
+  const label = relative(root, path);
+  if (isCredentialFilename(basename(path))) throw new Error(`Unexpected credential/config filename: ${label}; contents not read.`);
   const content = readFileSync(path, 'utf8');
-  if (home.length > 4) {
-    assert.ok(!content.includes(home) && !content.includes(home.replaceAll('\\', '/')), 'Machine-specific home path found in ' + path);
+  if ((home.length > 4 && (content.includes(home) || content.includes(home.replaceAll('\\', '/'))))
+    || /[A-Za-z]:[\\/]+Users[\\/]+[^\s"'<>]+/.test(content)) {
+    throw new Error(`Machine-specific path in ${label}; values redacted.`);
   }
-  assert.doesNotMatch(content, /[A-Za-z]:[\\/]+Users[\\/]+[^\s"'<>]+/, 'Personal Windows path found in ' + path);
-  assert.doesNotMatch(content, /sk-[A-Za-z0-9_-]{24,}/, 'Potential credential found in ' + path);
+  assertNoSensitiveContent(content, label);
 }
 console.log(`Package allowlist passed (${files.length} files); repository path/credential-pattern checks passed.`);

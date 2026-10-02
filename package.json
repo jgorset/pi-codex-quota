@@ -8,7 +8,7 @@
   "keywords": ["pi-package", "pi-extension", "codex", "quota"],
   "engines": { "node": ">=24" },
   "pi": { "extensions": ["./dist/index.ts"] },
-  "files": ["dist/index.ts", "README.md", "CHANGELOG.md", "LICENSE"],
+  "files": ["dist/index.ts", "README.md", "CHANGELOG.md", "LICENSE", "SECURITY.md"],
   "peerDependencies": { "@earendil-works/pi-coding-agent": "*" },
   "devDependencies": {
     "@earendil-works/pi-coding-agent": "1.0.0",
