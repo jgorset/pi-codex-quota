@@ -14,7 +14,7 @@ let results;
 try { results = JSON.parse(packed.stdout); }
 catch { throw new Error('npm pack did not return the expected JSON manifest.'); }
 const files = results[0].files.map(file => file.path).sort();
-assert.deepEqual(files, ['CHANGELOG.md', 'LICENSE', 'README.md', 'SECURITY.md', 'dist/index.ts', 'package.json'].sort());
+assert.deepEqual(files, ['CHANGELOG.md', 'LICENSE', 'README.md', 'dist/index.ts', 'package.json'].sort());
 const excluded = new Set(['node_modules', '.git', '.validation', 'coverage']);
 function walk(dir) {
   return readdirSync(dir, { withFileTypes: true }).flatMap(entry => {

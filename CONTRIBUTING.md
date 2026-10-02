@@ -19,10 +19,18 @@ Use only synthetic fixtures. Never commit raw account responses, credentials, ac
 - Verify a normal interactive Pi session, `/codex-quota`, `/codex-resets`, upgrade/reload, and unavailable/stale states. Do not redeem a reset to validate.
 - Review `npm pack --dry-run --json --ignore-scripts` and the Git diff for sensitive data and unrelated files.
 - Run a dedicated secret scanner over all Git history and the extracted package, with redaction enabled (for example `gitleaks git --log-opts="--all" --redact=100`). Never paste unredacted matches into logs or reports.
-- Run `npm audit` including development dependencies and review open findings in [SECURITY.md](SECURITY.md). A clean runtime-only audit is not a clean full dependency audit.
+- Run `npm audit` including development dependencies and review the development security notes below. A clean runtime-only audit is not a clean full dependency audit.
 - Ensure the bundle matches source with `npm run build:check`.
 - Confirm repository owner/URL, public visibility, and commit-author metadata before pushing. Set the real repository metadata in `package.json`; do not ship placeholder URLs.
 - Update the changelog and tag only after acceptance. Git installation needs the committed bundle, not build hooks.
 - Keep `private: true` until npm publication is explicitly approved; remove it only as part of that release decision.
 
 The repository contains no publishing automation, auth configuration or registry tokens. No test requires a logged-in Codex account.
+
+## Development security notes
+
+The pinned Pi 1.0.0 test host inherits `brace-expansion` 5.0.9 through its published shrinkwrap. npm reports high-severity denial-of-service advisories, including [GHSA-q2hr-2g5m-vwhr](https://github.com/advisories/GHSA-q2hr-2g5m-vwhr); 5.0.12 is patched. Standard updates and a root override did not replace the shrinkwrapped version during review. Upgrade the test host when an appropriate upstream fix is available and rerun the loader regressions. Do not suppress the advisory or silently patch installed dependencies.
+
+Seven dev-only entries in that shrinkwrap also lack lockfile integrity hashes. Their URLs use HTTPS on the public npm registry, but this remains a development supply-chain hardening gap. These dependencies are not included in the extension bundle or package archive; the full development dependency audit is not clean.
+
+Pi extensions and the Codex subprocess run with your user permissions, not in a sandbox. Use a trusted Codex executable and PATH; the subprocess inherits the normal process environment. Never include credentials or raw account responses in public reports.

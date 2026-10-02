@@ -10,10 +10,10 @@ Weekly: 20% / 3d 12h left ↓
 
 Requires **Node 24+**, **Pi 1.0+**, and the [Codex CLI](https://github.com/openai/codex), already signed in.
 
-This is an unpublished release candidate. From the parent of your local checkout:
+Early release. Install the pinned Git version:
 
 ```sh
-pi install ./pi-codex-quota
+pi install git:github.com/jgorset/pi-codex-quota@v0.1.0
 ```
 
 Run `/reload` in Pi. No build needed. Disable any older quota extension first to avoid duplicate commands.
@@ -42,7 +42,7 @@ Works with Pi's standard footer. With **pi-vitals**, add its `ext_status` segmen
 
 **Unavailable?** Check that `codex --version` works and Codex is signed in, then refresh. Some accounts don't return a weekly window; enterprise/monthly support isn't included.
 
-The extension uses Codex's existing login. It doesn't read credential files, redeem resets, make model calls, or send telemetry. See [security notes](SECURITY.md).
+The extension uses Codex's existing login. It doesn't read credential files, redeem resets, make model calls, or send telemetry.
 
 ## Development
 
